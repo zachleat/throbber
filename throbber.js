@@ -31,6 +31,7 @@ class Throbber extends HTMLElement {
 }
 :host(.${Throbber.classes.active}):after {
 	content: "";
+	opacity: .4;
 	background-image: linear-gradient(238deg, #ff0000, #ff8000, #ffff00, #80ff00, #00ff00, #00ff80, #00ffff, #0080ff, #0000ff, #8000ff, #ff0080);
 	background-size: 1200% 1200%;
 	background-position: 2% 80%;
