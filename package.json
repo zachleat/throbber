@@ -1,7 +1,7 @@
 {
   "name": "@zachleat/throbber",
   "version": "1.0.0",
-  "description": "Loading indicator for images (and maybe other things later).",
+  "description": "Loading indicator overlay for images (and maybe other things later).",
   "main": "throbber.js",
   "publishConfig": {
     "access": "public"
