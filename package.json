@@ -1,0 +1,26 @@
+{
+  "name": "@zachleat/throbber",
+  "version": "1.0.0",
+  "description": "Loading indicator for images (and maybe other things later).",
+  "main": "throbber.js",
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "start": "npx http-server ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zachleat/throbber.git"
+  },
+  "author": {
+    "name": "Zach Leatherman",
+    "email": "zachleatherman@gmail.com",
+    "url": "https://zachleat.com/"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/zachleat/throbber/issues"
+  },
+  "homepage": "https://github.com/zachleat/throbber#readme"
+}

@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="description" content="">
+		<title>&lt;throbber&gt; Web Component</title>
+		<style>
+		/* Demo styles */
+		body {
+			font-family: system-ui, sans-serif;
+		}
+
+		/* See https://www.zachleat.com/web/fluid-images/#content-layout-shift-addendum */
+		img {
+			display: block;
+			max-width: 100%;
+			height: auto;
+		}
+
+
+		</style>
+
+		<script type="module" src="throbber.js"></script>
+	</head>
+	<body>
+		<header>
+			<h1>&lt;throbber&gt;  Web Component</h1>
+		</header>
+		<main>
+			<p><a href="https://github.com/zachleat/throbber">Back to the Source Code</a></p>
+			<h2>Stock</h2>
+			<throb-ber>
+				<img src="https://v1.screenshot.11ty.dev/https%3A%2F%2Fregister.11ty-conf.pages.dev%2Fticket-image%2F876cecc5531648eab7137c5f853c7539/opengraph/" alt="One uniquely generated virtual ticket for 11ty Conference." width="1200" height="630" loading="eager" decoding="async">
+			</throb-ber>
+		</main>
+	</body>
+</html>
