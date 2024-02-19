@@ -17,6 +17,11 @@
 			max-width: 100%;
 			height: auto;
 		}
+
+		/* Demo styles */
+		throb-ber {
+			max-width: 30em;
+		}
 		</style>
 		<script type="module" src="throbber.js"></script>
 		<script type="module">
@@ -39,7 +44,7 @@
 
 			<p>This image has a simulated +2s loading delay.</p>
 			<!-- this `pause` attribute is for swapping the src from a Data URI, you probably don’t want it -->
-			<throb-ber pause>
+			<throb-ber pause style="background: #666; --throbber-height: 100%;">
 				<img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'/%3E" alt="One uniquely generated virtual ticket for 11ty Conference." width="1200" height="630" loading="eager" decoding="async" id="demo-image">
 			</throb-ber>
 		</main>

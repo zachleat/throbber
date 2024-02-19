@@ -28,22 +28,23 @@ class Throbber extends HTMLElement {
 	position: var(--throbber-position, relative); /* Allow other parents to be stacking context */
 }
 
-:host(:not(.${Throbber.classes.active})) .${Throbber.classes.throbber} {
-	display: none;
-}
-.${Throbber.classes.throbber} {
-	z-index: 1;
-	background-color: var(--throbber-background, rgba(0,0,0,.3));
-}
 .${Throbber.classes.throbber},
 .${Throbber.classes.throbber}:before {
 	position: absolute;
 	inset: 0;
+	bottom: auto;
+	z-index: 1;
+	pointer-events: none;
+	height: var(--throbber-height, .5em);
+}
+:host(:not(.${Throbber.classes.active})) .${Throbber.classes.throbber}:before {
+	opacity: 0;
 }
 .${Throbber.classes.throbber}:before {
 	content: "";
-	bottom: auto;
-	height: 4px;
+	display: block;
+	opacity: .8;
+	transition: opacity .3s;
 	background-image: linear-gradient(238deg, #ff0000, #ff8000, #ffff00, #80ff00, #00ff00, #00ff80, #00ffff, #0080ff, #0000ff, #8000ff, #ff0080);
 	background-size: 1200% 1200%;
 	background-position: 2% 80%;
