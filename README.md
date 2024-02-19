@@ -1,4 +1,4 @@
-# throbber
+# `<throb-ber>` Web Component
 
 A web component to add a little baby rainbow gradient overlay until all of the images nested inside have finished loading. Works best with expensive dynamically generated images (like screenshots).
 
