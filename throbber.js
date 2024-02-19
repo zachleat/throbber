@@ -10,6 +10,7 @@ class Throbber extends HTMLElement {
 	}
 
 	static attr = {
+		delay: "delay", // minimum amount of time before the throbber shows
 		pause: "pause", // even if an image load event fires, don’t resolve yet (datauri to real url swapping)
 	};
 
@@ -57,6 +58,14 @@ class Throbber extends HTMLElement {
 }
 `;
 
+	get delay() {
+		return parseInt(this.getAttribute(Throbber.attr.delay), 10) || 200;
+	}
+
+	get isPaused() {
+		return this.hasAttribute(Throbber.attr.pause);
+	}
+
 	useAnimation() {
 		return "matchMedia" in window && !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 	}
@@ -86,18 +95,24 @@ class Throbber extends HTMLElement {
 		let promises = [];
 		let images = this.querySelectorAll("img");
 		if(images.length > 0) {
-			this.addIndicator();
+			if(this.delay && !this.isPaused) {
+				setTimeout(() => {
+					this.addIndicator();
+				}, this.delay)
+			} else {
+				this.addIndicator();
+			}
 
 			for(let img of images) {
 				promises.push(new Promise((resolve, reject) => {
 					// resolve on error on on load
 					img.addEventListener("load", () => {
-						if(!this.hasAttribute(Throbber.attr.pause)) {
+						if(!this.isPaused) {
 							resolve()
 						}
 					});
 					img.addEventListener("error", () => {
-						if(!this.hasAttribute(Throbber.attr.pause)) {
+						if(!this.isPaused) {
 							resolve()
 						}
 					});
