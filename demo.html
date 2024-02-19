@@ -27,11 +27,13 @@
 		<script type="module">
 			// Transparent image swaps to real image after simulated 2 seconds
 			setTimeout(() => {
-				let img = document.getElementById("demo-image");
-				let throbber = img.closest("throb-ber");
-				throbber.removeAttribute("pause");
+				let images = document.getElementsByClassName("demo-image");
+				for(let img of images) {
+					let throbber = img.closest("throb-ber");
+					throbber.removeAttribute("pause");
 
-				img.src ='https://v1.screenshot.11ty.dev/https%3A%2F%2Fconf.11ty.dev%2Fticket-image%2F876cecc5531648eab7137c5f853c7539/opengraph/';
+					img.src ='https://v1.screenshot.11ty.dev/https%3A%2F%2Fconf.11ty.dev%2Fticket-image%2F876cecc5531648eab7137c5f853c7539/opengraph/';
+				}
 			}, 2000);
 		</script>
 	</head>
@@ -42,10 +44,21 @@
 		<main>
 			<p><a href="https://github.com/zachleat/throbber">Back to the Source Code</a></p>
 
-			<p>This image has a simulated +2s loading delay.</p>
+			<p>These images have a simulated +2s loading delay.</p>
+			<h2>Stock</h2>
 			<!-- this `pause` attribute is for swapping the src from a Data URI, you probably don’t want it -->
+			<throb-ber pause style="background: #666;">
+				<img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'/%3E" alt="One uniquely generated virtual ticket for 11ty Conference." width="1200" height="630" loading="eager" decoding="async" class="demo-image">
+			</throb-ber>
+
+			<h2>Custom height</h3>
 			<throb-ber pause style="background: #666; --throbber-height: 100%;">
-				<img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'/%3E" alt="One uniquely generated virtual ticket for 11ty Conference." width="1200" height="630" loading="eager" decoding="async" id="demo-image">
+				<img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'/%3E" alt="One uniquely generated virtual ticket for 11ty Conference." width="1200" height="630" loading="eager" decoding="async" class="demo-image">
+			</throb-ber>
+
+			<h2>Custom Gradient</h2>
+			<throb-ber pause style="background: #ddd; --throbber-opacity: 1; --throbber-image: linear-gradient(to right, white, rebeccapurple)">
+				<img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'/%3E" alt="One uniquely generated virtual ticket for 11ty Conference." width="1200" height="630" loading="eager" decoding="async" class="demo-image">
 			</throb-ber>
 		</main>
 	</body>
