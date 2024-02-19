@@ -10,10 +10,11 @@ class Throbber extends HTMLElement {
 	}
 
 	static attr = {
-		delay: "delay"
+		pause: "pause", // even if an image load event fires, don’t resolve yet (datauri to real url swapping)
 	};
 
 	static classes = {
+		throbber: "throbber",
 		active: "active",
 	};
 
@@ -23,35 +24,45 @@ class Throbber extends HTMLElement {
 	100% { background-position: 100% 50%; }
 }
 :host {
-	display: grid;
+	display: block;
+	position: var(--throbber-position, relative); /* Allow other parents to be stacking context */
 }
-:host(.${Throbber.classes.active}) ::slotted(*),
-:host(.${Throbber.classes.active}):after {
-	grid-area: 1 / 1;
+
+:host(:not(.${Throbber.classes.active})) .${Throbber.classes.throbber} {
+	display: none;
 }
-:host(.${Throbber.classes.active}):after {
+.${Throbber.classes.throbber} {
+	z-index: 1;
+	background-color: var(--throbber-background, rgba(0,0,0,.3));
+}
+.${Throbber.classes.throbber},
+.${Throbber.classes.throbber}:before {
+	position: absolute;
+	inset: 0;
+}
+.${Throbber.classes.throbber}:before {
 	content: "";
-	opacity: .4;
+	bottom: auto;
+	height: 4px;
 	background-image: linear-gradient(238deg, #ff0000, #ff8000, #ffff00, #80ff00, #00ff00, #00ff80, #00ffff, #0080ff, #0000ff, #8000ff, #ff0080);
 	background-size: 1200% 1200%;
 	background-position: 2% 80%;
 	animation: rainbow 4s ease-out alternate infinite;
 }
 @media (prefers-reduced-motion: reduce) {
-	:host(.${Throbber.classes.active}):after {
+	.${Throbber.classes.throbber} {
 		animation: none;
 	}
 }
 `;
 
-	get delay() {
-		return parseInt(this.getAttribute(Throbber.attr.delay), 10) || 200;
+	useAnimation() {
+		return "matchMedia" in window && !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 	}
 
 	connectedCallback() {
 		// https://caniuse.com/mdn-api_cssstylesheet_replacesync
-		// TODO we already prefers-reduced-motion above but maybe also skip out early here too
-		if(this.shadowRoot || !("replaceSync" in CSSStyleSheet.prototype)) {
+		if(this.shadowRoot || !("replaceSync" in CSSStyleSheet.prototype) || !this.useAnimation()) {
 			return;
 		}
 
@@ -63,28 +74,39 @@ class Throbber extends HTMLElement {
 		let slot = document.createElement("slot");
 		shadowroot.appendChild(slot);
 
-		let images = this.querySelectorAll("img");
-		// Add a delay
-		if(this.delay) {
-			setTimeout(() => {
-				this.addIndicator();
-			}, this.delay)
-		} else {
-			this.addIndicator();
-		}
+		let throbber = document.createElement("div");
+		throbber.classList.add(Throbber.classes.throbber);
+		// feature?: click to remove
+		// throbber.addEventListener("click", () => {
+		// 	this.removeIndicator();
+		// })
+		shadowroot.appendChild(throbber);
 
 		let promises = [];
-		for(let img of images) {
-			promises.push(new Promise((resolve, reject) => {
-				// resolve on error on on load
-				img.addEventListener("load", () => resolve());
-				img.addEventListener("error", () => resolve());
-			}));
+		let images = this.querySelectorAll("img");
+		if(images.length > 0) {
+			this.addIndicator();
+
+			for(let img of images) {
+				promises.push(new Promise((resolve, reject) => {
+					// resolve on error on on load
+					img.addEventListener("load", () => {
+						if(!this.hasAttribute(Throbber.attr.pause)) {
+							resolve()
+						}
+					});
+					img.addEventListener("error", () => {
+						if(!this.hasAttribute(Throbber.attr.pause)) {
+							resolve()
+						}
+					});
+				}));
+			}
 		}
 
-		Promise.all(promises).then(() => {
+		this.ready = Promise.all(promises).then(() => {
 			this.finished = true;
-			this.removeIndicator()
+			this.removeIndicator();
 		});
 	}
 
